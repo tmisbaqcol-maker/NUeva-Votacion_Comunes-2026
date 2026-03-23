@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_fa49358000051104a95771528c15c94f {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+<div style="
+    position: fixed; 
+    top: 12px; left: 50px; width: 430px; z-index: 9999;
+    background-color: rgba(255,255,255,0.92);
+    border: 1px solid #cfcfcf;
+    border-radius: 10px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-family: Arial, sans-serif;
+">
+    <div style="font-size: 20px; font-weight: 700; color: #1f1f1f; margin-bottom: 4px;">
+        ATLÁNTICO · MAPA INTERACTIVO DE VOTACIÓN
+    </div>
+    <div style="font-size: 12px; color: #444;">
+        Ubicación por municipio · tamaño del círculo = volumen de votos
+    </div>
+</div>
+    
+<div style="
+    position: fixed; 
+    bottom: 28px; left: 50px; width: 240px; z-index: 9999;
+    background-color: rgba(255,255,255,0.95);
+    border: 1px solid #cfcfcf;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-family: Arial, sans-serif;
+">
+    <div style="font-size: 14px; font-weight: 700; margin-bottom: 8px;">Clasificación</div>
+    <div style="font-size: 12px; margin: 4px 0;"><span style="display:inline-block;width:12px;height:12px;background:#b30000;border-radius:50%;margin-right:8px;"></span>ALTO (200+)</div>
+    <div style="font-size: 12px; margin: 4px 0;"><span style="display:inline-block;width:12px;height:12px;background:#f57c00;border-radius:50%;margin-right:8px;"></span>MEDIO (50–199)</div>
+    <div style="font-size: 12px; margin: 4px 0;"><span style="display:inline-block;width:12px;height:12px;background:#fdd835;border-radius:50%;margin-right:8px;"></span>BAJO (0–49)</div>
+</div>
+    
+<div style="
+    position: fixed; 
+    top: 95px; right: 18px; width: 300px; z-index: 9999;
+    background-color: rgba(255,255,255,0.95);
+    border: 1px solid #cfcfcf;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-family: Arial, sans-serif;
+">
+    <div style="font-size: 14px; font-weight: 700; margin-bottom: 8px;">Resumen ejecutivo</div>
+    <div style="font-size: 12px; margin-bottom: 8px;"><b>Total votos:</b> 2,279</div>
+    <div style="font-size: 12px; margin-bottom: 6px;"><b>Alta concentración:</b> Barranquilla, Soledad</div>
+    <div style="font-size: 12px;"><b>Nivel medio:</b> Baranoa, Malambo, Puerto Colombia, Sabanalarga, Santa Lucía</div>
+</div>
+    
+            <div class="folium-map" id="map_fa49358000051104a95771528c15c94f" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_fa49358000051104a95771528c15c94f = L.map(
+                "map_fa49358000051104a95771528c15c94f",
+                {
+                    center: [10.78, -74.88],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 9,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_fa49358000051104a95771528c15c94f);
+
+            
+
+        
+    
+            var tile_layer_e64e830e3507949b938978140704af9d = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_e64e830e3507949b938978140704af9d.addTo(map_fa49358000051104a95771528c15c94f);
+        
+    
+            var feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_aeb6ade3e1d32698321594467a8c1d52 = L.circleMarker(
+                [10.9639, -74.7964],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b30000", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 36.0, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_832ccd0adc01283549b1308862d6921c = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_13978f79d83685fba00d1816a7d95e39 = $(`<div id="html_13978f79d83685fba00d1816a7d95e39" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Barranquilla</div>         <div style="font-size: 13px;"><b>Votos:</b> 1166</div>         <div style="font-size: 13px;"><b>Nivel:</b> ALTO</div>     </div>     </div>`)[0];
+                popup_832ccd0adc01283549b1308862d6921c.setContent(html_13978f79d83685fba00d1816a7d95e39);
+            
+        
+
+        circle_marker_aeb6ade3e1d32698321594467a8c1d52.bindPopup(popup_832ccd0adc01283549b1308862d6921c)
+        ;
+
+        
+    
+    
+            circle_marker_aeb6ade3e1d32698321594467a8c1d52.bindTooltip(
+                `<div>
+                     Barranquilla: 1166 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_25b7b1fe5f523d552843c61fee6994fd = L.marker(
+                [10.9639, -74.7964],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_a95f7195aa71e8dd5f25908cf93e8442 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Barranquilla\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_25b7b1fe5f523d552843c61fee6994fd.setIcon(div_icon_a95f7195aa71e8dd5f25908cf93e8442);
+            
+    
+            var circle_marker_2f906ae15106d70e29e6850fc75dce01 = L.circleMarker(
+                [10.7948, -74.9207],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f57c00", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14.244860665710148, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_8a3dc64a91d307d28619ffd4727ca804 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_cded30ff1c7f16de81bb692ecdaa42f2 = $(`<div id="html_cded30ff1c7f16de81bb692ecdaa42f2" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Baranoa</div>         <div style="font-size: 13px;"><b>Votos:</b> 58</div>         <div style="font-size: 13px;"><b>Nivel:</b> MEDIO</div>     </div>     </div>`)[0];
+                popup_8a3dc64a91d307d28619ffd4727ca804.setContent(html_cded30ff1c7f16de81bb692ecdaa42f2);
+            
+        
+
+        circle_marker_2f906ae15106d70e29e6850fc75dce01.bindPopup(popup_8a3dc64a91d307d28619ffd4727ca804)
+        ;
+
+        
+    
+    
+            circle_marker_2f906ae15106d70e29e6850fc75dce01.bindTooltip(
+                `<div>
+                     Baranoa: 58 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_1f0f45c51d84693388cf5ed8dcd8ae35 = L.marker(
+                [10.7948, -74.9207],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_cded9b58498c61f1c7c8f539cc97cd60 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Baranoa\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_1f0f45c51d84693388cf5ed8dcd8ae35.setIcon(div_icon_cded9b58498c61f1c7c8f539cc97cd60);
+            
+    
+            var circle_marker_5b04b4690695e1cbfd2cfde4bb11b4d8 = L.circleMarker(
+                [10.3786, -74.8847],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.574255191158933, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_ea7437f3fd5084e4724ef0e235c10b12 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_d255e95d578c08898d6a262beccdfe25 = $(`<div id="html_d255e95d578c08898d6a262beccdfe25" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Campo de la Cruz</div>         <div style="font-size: 13px;"><b>Votos:</b> 19</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_ea7437f3fd5084e4724ef0e235c10b12.setContent(html_d255e95d578c08898d6a262beccdfe25);
+            
+        
+
+        circle_marker_5b04b4690695e1cbfd2cfde4bb11b4d8.bindPopup(popup_ea7437f3fd5084e4724ef0e235c10b12)
+        ;
+
+        
+    
+    
+            circle_marker_5b04b4690695e1cbfd2cfde4bb11b4d8.bindTooltip(
+                `<div>
+                     Campo de la Cruz: 19 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_d340871b4ba3665c29908a7f854b96d8 = L.marker(
+                [10.3786, -74.8847],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_0d1a8a358f1d2e40776747afcaae40c1 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Campo de la Cruz\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_d340871b4ba3665c29908a7f854b96d8.setIcon(div_icon_0d1a8a358f1d2e40776747afcaae40c1);
+            
+    
+            var circle_marker_76ff3154df8c310f3771f4661ae47dd3 = L.circleMarker(
+                [10.4598, -74.8797],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.068123053881058, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_c359fa4f1ddd86b56561665847db610b = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_a4110cb40288cb5f643ed39713a31cd5 = $(`<div id="html_a4110cb40288cb5f643ed39713a31cd5" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Candelaria</div>         <div style="font-size: 13px;"><b>Votos:</b> 14</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_c359fa4f1ddd86b56561665847db610b.setContent(html_a4110cb40288cb5f643ed39713a31cd5);
+            
+        
+
+        circle_marker_76ff3154df8c310f3771f4661ae47dd3.bindPopup(popup_c359fa4f1ddd86b56561665847db610b)
+        ;
+
+        
+    
+    
+            circle_marker_76ff3154df8c310f3771f4661ae47dd3.bindTooltip(
+                `<div>
+                     Candelaria: 14 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_338a21f706d501eb638afb651fcf1fec = L.marker(
+                [10.4598, -74.8797],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_ed15d4b036cf37808402593da63d6a0c = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Candelaria\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_338a21f706d501eb638afb651fcf1fec.setIcon(div_icon_ed15d4b036cf37808402593da63d6a0c);
+            
+    
+            var circle_marker_99e9a7c45e898a7fabc96b92d0713706 = L.circleMarker(
+                [10.8979, -74.887],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.314145013195379, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_8240637a6941137a26887a4afdf1acc9 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_12825ecec9d9565f6cfc642260e1bee0 = $(`<div id="html_12825ecec9d9565f6cfc642260e1bee0" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Galapa</div>         <div style="font-size: 13px;"><b>Votos:</b> 42</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_8240637a6941137a26887a4afdf1acc9.setContent(html_12825ecec9d9565f6cfc642260e1bee0);
+            
+        
+
+        circle_marker_99e9a7c45e898a7fabc96b92d0713706.bindPopup(popup_8240637a6941137a26887a4afdf1acc9)
+        ;
+
+        
+    
+    
+            circle_marker_99e9a7c45e898a7fabc96b92d0713706.bindTooltip(
+                `<div>
+                     Galapa: 42 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_d1b8e7a30e679bfb64c33eafa96712d1 = L.marker(
+                [10.8979, -74.887],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_1d0afe6dcd356172f5b9779689095d6e = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Galapa\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_d1b8e7a30e679bfb64c33eafa96712d1.setIcon(div_icon_1d0afe6dcd356172f5b9779689095d6e);
+            
+    
+            var circle_marker_6eecde3502a1399a997d19cc98638a84 = L.circleMarker(
+                [10.8293, -75.0338],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.593037253018226, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_3f8104a3792075afd76e89f29c33a3d3 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_a0a83579e3c29f3603d47e3e48fd311c = $(`<div id="html_a0a83579e3c29f3603d47e3e48fd311c" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Juan de Acosta</div>         <div style="font-size: 13px;"><b>Votos:</b> 10</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_3f8104a3792075afd76e89f29c33a3d3.setContent(html_a0a83579e3c29f3603d47e3e48fd311c);
+            
+        
+
+        circle_marker_6eecde3502a1399a997d19cc98638a84.bindPopup(popup_3f8104a3792075afd76e89f29c33a3d3)
+        ;
+
+        
+    
+    
+            circle_marker_6eecde3502a1399a997d19cc98638a84.bindTooltip(
+                `<div>
+                     Juan de Acosta: 10 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_a3dd036b3ee8209c86734f8626929745 = L.marker(
+                [10.8293, -75.0338],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_2ba0befc67c4061950110088159362cc = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Juan de Acosta\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_a3dd036b3ee8209c86734f8626929745.setIcon(div_icon_2ba0befc67c4061950110088159362cc);
+            
+    
+            var circle_marker_b00cc1b037728dce5260f77aacd45a66 = L.circleMarker(
+                [10.6179, -75.1411],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.932535702284559, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_2f0f20f2cfe3690f75551dfed2634a7f = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_f92f0ad8676eaca9e8a017c86ad24083 = $(`<div id="html_f92f0ad8676eaca9e8a017c86ad24083" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Luruaco</div>         <div style="font-size: 13px;"><b>Votos:</b> 23</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_2f0f20f2cfe3690f75551dfed2634a7f.setContent(html_f92f0ad8676eaca9e8a017c86ad24083);
+            
+        
+
+        circle_marker_b00cc1b037728dce5260f77aacd45a66.bindPopup(popup_2f0f20f2cfe3690f75551dfed2634a7f)
+        ;
+
+        
+    
+    
+            circle_marker_b00cc1b037728dce5260f77aacd45a66.bindTooltip(
+                `<div>
+                     Luruaco: 23 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_378e7d8ca480d56a60d29cbf7fe42c07 = L.marker(
+                [10.6179, -75.1411],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_597fc1f063af334ebf91e04a8e55d07a = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Luruaco\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_378e7d8ca480d56a60d29cbf7fe42c07.setIcon(div_icon_597fc1f063af334ebf91e04a8e55d07a);
+            
+    
+            var circle_marker_d9b7a096b8fbc743adc81c789c54c841 = L.circleMarker(
+                [10.8593, -74.7739],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f57c00", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.349328774945505, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_e97d6afe4b289fb9784f17f92943a457 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_f68f06ac32aea79e76b15477ad911e11 = $(`<div id="html_f68f06ac32aea79e76b15477ad911e11" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Malambo</div>         <div style="font-size: 13px;"><b>Votos:</b> 130</div>         <div style="font-size: 13px;"><b>Nivel:</b> MEDIO</div>     </div>     </div>`)[0];
+                popup_e97d6afe4b289fb9784f17f92943a457.setContent(html_f68f06ac32aea79e76b15477ad911e11);
+            
+        
+
+        circle_marker_d9b7a096b8fbc743adc81c789c54c841.bindPopup(popup_e97d6afe4b289fb9784f17f92943a457)
+        ;
+
+        
+    
+    
+            circle_marker_d9b7a096b8fbc743adc81c789c54c841.bindTooltip(
+                `<div>
+                     Malambo: 130 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_2c5b8517e98509ff0b459462dc1c3aa3 = L.marker(
+                [10.8593, -74.7739],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_bca783fdfe45272de53f8ad9468927c2 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Malambo\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_2c5b8517e98509ff0b459462dc1c3aa3.setIcon(div_icon_bca783fdfe45272de53f8ad9468927c2);
+            
+    
+            var circle_marker_5027ddc227a7190e7818e9812d731a1c = L.circleMarker(
+                [10.4452, -74.9588],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.017116038814006, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_5f7cc76b74d3e3ad0bf2ee93995c9be9 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_c93cf6edc6cd64d857296c5d3b33eeb8 = $(`<div id="html_c93cf6edc6cd64d857296c5d3b33eeb8" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Manatí</div>         <div style="font-size: 13px;"><b>Votos:</b> 24</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_5f7cc76b74d3e3ad0bf2ee93995c9be9.setContent(html_c93cf6edc6cd64d857296c5d3b33eeb8);
+            
+        
+
+        circle_marker_5027ddc227a7190e7818e9812d731a1c.bindPopup(popup_5f7cc76b74d3e3ad0bf2ee93995c9be9)
+        ;
+
+        
+    
+    
+            circle_marker_5027ddc227a7190e7818e9812d731a1c.bindTooltip(
+                `<div>
+                     Manatí: 24 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_26dfa1e522f9a73950b9cb8ceacbe5a4 = L.marker(
+                [10.4452, -74.9588],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_907e5b5b7128fc2f389c58a7083bfcd6 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Manat\u00ed\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_26dfa1e522f9a73950b9cb8ceacbe5a4.setIcon(div_icon_907e5b5b7128fc2f389c58a7083bfcd6);
+            
+    
+            var circle_marker_1c71c3d92a92fde944c95f520501e906 = L.circleMarker(
+                [10.7405, -74.7544],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.478924539562845, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_e32382ea9d9c5cc628b9e215022a5518 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_2dc63effcd78ea5333c2348bfa0fa8f7 = $(`<div id="html_2dc63effcd78ea5333c2348bfa0fa8f7" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Palmar de Varela</div>         <div style="font-size: 13px;"><b>Votos:</b> 18</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_e32382ea9d9c5cc628b9e215022a5518.setContent(html_2dc63effcd78ea5333c2348bfa0fa8f7);
+            
+        
+
+        circle_marker_1c71c3d92a92fde944c95f520501e906.bindPopup(popup_e32382ea9d9c5cc628b9e215022a5518)
+        ;
+
+        
+    
+    
+            circle_marker_1c71c3d92a92fde944c95f520501e906.bindTooltip(
+                `<div>
+                     Palmar de Varela: 18 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_8415c0209203c8ddbf6e4c567dfa924e = L.marker(
+                [10.7405, -74.7544],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_9ee0867484ddb1e89513f5ea4a362b3b = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Palmar de Varela\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_8415c0209203c8ddbf6e4c567dfa924e.setIcon(div_icon_9ee0867484ddb1e89513f5ea4a362b3b);
+            
+    
+            var circle_marker_671eacab3de0688f08d2f017ad392647 = L.circleMarker(
+                [10.7482, -75.1077],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.956517352257958, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_47dbf229fff3b819662cfdfb58054afa = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_53811a59ab565512ae0753d9cdc6f46e = $(`<div id="html_53811a59ab565512ae0753d9cdc6f46e" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Piojó</div>         <div style="font-size: 13px;"><b>Votos:</b> 13</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_47dbf229fff3b819662cfdfb58054afa.setContent(html_53811a59ab565512ae0753d9cdc6f46e);
+            
+        
+
+        circle_marker_671eacab3de0688f08d2f017ad392647.bindPopup(popup_47dbf229fff3b819662cfdfb58054afa)
+        ;
+
+        
+    
+    
+            circle_marker_671eacab3de0688f08d2f017ad392647.bindTooltip(
+                `<div>
+                     Piojó: 13 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_444d98df1b43012dcdfaa11785d28683 = L.marker(
+                [10.7482, -75.1077],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_51690592108ed3ff3f03071d21994687 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Pioj\u00f3\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_444d98df1b43012dcdfaa11785d28683.setIcon(div_icon_51690592108ed3ff3f03071d21994687);
+            
+    
+            var circle_marker_bb91e364e619a74d7b2f054a4e62cf3d = L.circleMarker(
+                [10.7779, -74.8534],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.840529991858627, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_c049f7254fb37d9d2c545503ecc4c097 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_da85283abc2bfff3446f3193c02d61e9 = $(`<div id="html_da85283abc2bfff3446f3193c02d61e9" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Polonuevo</div>         <div style="font-size: 13px;"><b>Votos:</b> 12</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_c049f7254fb37d9d2c545503ecc4c097.setContent(html_da85283abc2bfff3446f3193c02d61e9);
+            
+        
+
+        circle_marker_bb91e364e619a74d7b2f054a4e62cf3d.bindPopup(popup_c049f7254fb37d9d2c545503ecc4c097)
+        ;
+
+        
+    
+    
+            circle_marker_bb91e364e619a74d7b2f054a4e62cf3d.bindTooltip(
+                `<div>
+                     Polonuevo: 12 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_040c4c12fb5c00d6a095f1a1f63e36b5 = L.marker(
+                [10.7779, -74.8534],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_e056b524578687c68eb2f5b70f1bf5fe = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Polonuevo\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_040c4c12fb5c00d6a095f1a1f63e36b5.setIcon(div_icon_e056b524578687c68eb2f5b70f1bf5fe);
+            
+    
+            var circle_marker_f3422de1fdaaf66cf33b8910b62ecfc3 = L.circleMarker(
+                [10.6435, -74.7532],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.956517352257958, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_a901fd8a6831a93d16b729f96d8614a9 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_5e00aec28584e39a80a440438893bba2 = $(`<div id="html_5e00aec28584e39a80a440438893bba2" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Ponedera</div>         <div style="font-size: 13px;"><b>Votos:</b> 13</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_a901fd8a6831a93d16b729f96d8614a9.setContent(html_5e00aec28584e39a80a440438893bba2);
+            
+        
+
+        circle_marker_f3422de1fdaaf66cf33b8910b62ecfc3.bindPopup(popup_a901fd8a6831a93d16b729f96d8614a9)
+        ;
+
+        
+    
+    
+            circle_marker_f3422de1fdaaf66cf33b8910b62ecfc3.bindTooltip(
+                `<div>
+                     Ponedera: 13 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_6d8a430dba574b10b63e288b7abacaaa = L.marker(
+                [10.6435, -74.7532],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_a619a5df7b98eb8d5cdd70dcc924968c = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Ponedera\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_6d8a430dba574b10b63e288b7abacaaa.setIcon(div_icon_a619a5df7b98eb8d5cdd70dcc924968c);
+            
+    
+            var circle_marker_0c4246b698129854f649445eed4771d2 = L.circleMarker(
+                [11.0044, -74.9083],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f57c00", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.515335950078253, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_af216002c393f6083c5a4e9d3860d880 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_7028bf4ed4448cba9c4834e3f1081dcd = $(`<div id="html_7028bf4ed4448cba9c4834e3f1081dcd" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Puerto Colombia</div>         <div style="font-size: 13px;"><b>Votos:</b> 84</div>         <div style="font-size: 13px;"><b>Nivel:</b> MEDIO</div>     </div>     </div>`)[0];
+                popup_af216002c393f6083c5a4e9d3860d880.setContent(html_7028bf4ed4448cba9c4834e3f1081dcd);
+            
+        
+
+        circle_marker_0c4246b698129854f649445eed4771d2.bindPopup(popup_af216002c393f6083c5a4e9d3860d880)
+        ;
+
+        
+    
+    
+            circle_marker_0c4246b698129854f649445eed4771d2.bindTooltip(
+                `<div>
+                     Puerto Colombia: 84 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_05e6eacbdb095f5b0efa930af223d5e4 = L.marker(
+                [11.0044, -74.9083],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_da9c803d93caf8770e8bc8b55a09889d = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Puerto Colombia\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_05e6eacbdb095f5b0efa930af223d5e4.setIcon(div_icon_da9c803d93caf8770e8bc8b55a09889d);
+            
+    
+            var circle_marker_449a7bfd643617a4e9fb3cf0cbf39b09 = L.circleMarker(
+                [10.4953, -75.124],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.987806744802683, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_f4baa1f520db3cdd1332421ae0a9df8b = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_bd2a9510f9cd4e998cdf7f4cd9c189bb = $(`<div id="html_bd2a9510f9cd4e998cdf7f4cd9c189bb" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Repelón</div>         <div style="font-size: 13px;"><b>Votos:</b> 37</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_f4baa1f520db3cdd1332421ae0a9df8b.setContent(html_bd2a9510f9cd4e998cdf7f4cd9c189bb);
+            
+        
+
+        circle_marker_449a7bfd643617a4e9fb3cf0cbf39b09.bindPopup(popup_f4baa1f520db3cdd1332421ae0a9df8b)
+        ;
+
+        
+    
+    
+            circle_marker_449a7bfd643617a4e9fb3cf0cbf39b09.bindTooltip(
+                `<div>
+                     Repelón: 37 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_62db5c33ecdbaf53e5e0faf8a1bcf15a = L.marker(
+                [10.4953, -75.124],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_21ca9ff06ecdafbb9ce0b96738dbd9ff = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Repel\u00f3n\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_62db5c33ecdbaf53e5e0faf8a1bcf15a.setIcon(div_icon_21ca9ff06ecdafbb9ce0b96738dbd9ff);
+            
+    
+            var circle_marker_92874dd954a90d57b93bdf8c72c44ca0 = L.circleMarker(
+                [10.7959, -74.7647],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.415783324288782, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_504ecb75d866e88e56f592f63dcd2df8 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_a7351fc425ed0958e8be51dbb7cf580e = $(`<div id="html_a7351fc425ed0958e8be51dbb7cf580e" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Sabanagrande</div>         <div style="font-size: 13px;"><b>Votos:</b> 29</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_504ecb75d866e88e56f592f63dcd2df8.setContent(html_a7351fc425ed0958e8be51dbb7cf580e);
+            
+        
+
+        circle_marker_92874dd954a90d57b93bdf8c72c44ca0.bindPopup(popup_504ecb75d866e88e56f592f63dcd2df8)
+        ;
+
+        
+    
+    
+            circle_marker_92874dd954a90d57b93bdf8c72c44ca0.bindTooltip(
+                `<div>
+                     Sabanagrande: 29 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_96a8d376de69dea9646bfe9fc0441110 = L.marker(
+                [10.7959, -74.7647],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_1573d31bc41dd6fe640eebc4c61714b9 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Sabanagrande\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_96a8d376de69dea9646bfe9fc0441110.setIcon(div_icon_1573d31bc41dd6fe640eebc4c61714b9);
+            
+    
+            var circle_marker_ced11ba997dd4ccfc5f0b390b2f73850 = L.circleMarker(
+                [10.6307, -74.9221],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f57c00", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14.860531711812296, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_ef674d105fa50fc640e993147a6abfda = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_abd43f770b98dfe779b83c4d25aed83a = $(`<div id="html_abd43f770b98dfe779b83c4d25aed83a" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Sabanalarga</div>         <div style="font-size: 13px;"><b>Votos:</b> 70</div>         <div style="font-size: 13px;"><b>Nivel:</b> MEDIO</div>     </div>     </div>`)[0];
+                popup_ef674d105fa50fc640e993147a6abfda.setContent(html_abd43f770b98dfe779b83c4d25aed83a);
+            
+        
+
+        circle_marker_ced11ba997dd4ccfc5f0b390b2f73850.bindPopup(popup_ef674d105fa50fc640e993147a6abfda)
+        ;
+
+        
+    
+    
+            circle_marker_ced11ba997dd4ccfc5f0b390b2f73850.bindTooltip(
+                `<div>
+                     Sabanalarga: 70 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_7ef9b88806f28b7e1ef6b1f948ef326b = L.marker(
+                [10.6307, -74.9221],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_63534b2d9fb1db7d1b4f4a667d7ce964 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Sabanalarga\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_7ef9b88806f28b7e1ef6b1f948ef326b.setIcon(div_icon_63534b2d9fb1db7d1b4f4a667d7ce964);
+            
+    
+            var circle_marker_5da8f030e0f51209efda09dd95b87aaf = L.circleMarker(
+                [10.324, -74.9605],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#f57c00", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14.190791590304084, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_4e42942cd2778f92559449a8045fd4c2 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_92d1390472c209f62f4fa66c72bd5404 = $(`<div id="html_92d1390472c209f62f4fa66c72bd5404" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Santa Lucía</div>         <div style="font-size: 13px;"><b>Votos:</b> 57</div>         <div style="font-size: 13px;"><b>Nivel:</b> MEDIO</div>     </div>     </div>`)[0];
+                popup_4e42942cd2778f92559449a8045fd4c2.setContent(html_92d1390472c209f62f4fa66c72bd5404);
+            
+        
+
+        circle_marker_5da8f030e0f51209efda09dd95b87aaf.bindPopup(popup_4e42942cd2778f92559449a8045fd4c2)
+        ;
+
+        
+    
+    
+            circle_marker_5da8f030e0f51209efda09dd95b87aaf.bindTooltip(
+                `<div>
+                     Santa Lucía: 57 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_92a49a4e95c1050f21d81156d523ea13 = L.marker(
+                [10.324, -74.9605],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_9d93596f48fdab88ea2e38ee573ceb3e = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Santa Luc\u00eda\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_92a49a4e95c1050f21d81156d523ea13.setIcon(div_icon_9d93596f48fdab88ea2e38ee573ceb3e);
+            
+    
+            var circle_marker_1fd555c68a015b1211fc3f1b6bdf42fa = L.circleMarker(
+                [10.7577, -74.7545],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.956517352257958, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_afee09b3b608b50bf232742ec1c3edaa = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_d206bd9672fd6ef70e7ef86af634ea9a = $(`<div id="html_d206bd9672fd6ef70e7ef86af634ea9a" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Santo Tomás</div>         <div style="font-size: 13px;"><b>Votos:</b> 13</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_afee09b3b608b50bf232742ec1c3edaa.setContent(html_d206bd9672fd6ef70e7ef86af634ea9a);
+            
+        
+
+        circle_marker_1fd555c68a015b1211fc3f1b6bdf42fa.bindPopup(popup_afee09b3b608b50bf232742ec1c3edaa)
+        ;
+
+        
+    
+    
+            circle_marker_1fd555c68a015b1211fc3f1b6bdf42fa.bindTooltip(
+                `<div>
+                     Santo Tomás: 13 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_7f66b8599ec25054eedeb01be5ba5414 = L.marker(
+                [10.7577, -74.7545],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_a73e53600f7e81b7ea3d1b0b83d33e8d = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Santo Tom\u00e1s\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_7f66b8599ec25054eedeb01be5ba5414.setIcon(div_icon_a73e53600f7e81b7ea3d1b0b83d33e8d);
+            
+    
+            var circle_marker_e9658fd132367f9cd18075716d3e342b = L.circleMarker(
+                [10.9184, -74.7646],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b30000", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 24.562993738392965, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_32e53e5350749d1fd3a94b517ef277e3 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_f5d74179b9c03e62146112bf5b295630 = $(`<div id="html_f5d74179b9c03e62146112bf5b295630" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Soledad</div>         <div style="font-size: 13px;"><b>Votos:</b> 408</div>         <div style="font-size: 13px;"><b>Nivel:</b> ALTO</div>     </div>     </div>`)[0];
+                popup_32e53e5350749d1fd3a94b517ef277e3.setContent(html_f5d74179b9c03e62146112bf5b295630);
+            
+        
+
+        circle_marker_e9658fd132367f9cd18075716d3e342b.bindPopup(popup_32e53e5350749d1fd3a94b517ef277e3)
+        ;
+
+        
+    
+    
+            circle_marker_e9658fd132367f9cd18075716d3e342b.bindTooltip(
+                `<div>
+                     Soledad: 408 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_7e6490eb52330588ad099aff64c4303a = L.marker(
+                [10.9184, -74.7646],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_0fa853bf1914cee09ae84253b0eca379 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Soledad\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_7e6490eb52330588ad099aff64c4303a.setIcon(div_icon_0fa853bf1914cee09ae84253b0eca379);
+            
+    
+            var circle_marker_1fc078cf3e5c2c5698ab2761c237cbd4 = L.circleMarker(
+                [10.3337, -74.881],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.159641513187616, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_a320a51d250469aa2d557d0f68a495e9 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_f898c57ecf1fbe6dcf5bea7516da0061 = $(`<div id="html_f898c57ecf1fbe6dcf5bea7516da0061" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Suan</div>         <div style="font-size: 13px;"><b>Votos:</b> 2</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_a320a51d250469aa2d557d0f68a495e9.setContent(html_f898c57ecf1fbe6dcf5bea7516da0061);
+            
+        
+
+        circle_marker_1fc078cf3e5c2c5698ab2761c237cbd4.bindPopup(popup_a320a51d250469aa2d557d0f68a495e9)
+        ;
+
+        
+    
+    
+            circle_marker_1fc078cf3e5c2c5698ab2761c237cbd4.bindTooltip(
+                `<div>
+                     Suan: 2 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_cdc4e011f93c357a66da3e9db7f0f58c = L.marker(
+                [10.3337, -74.881],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_9ebbaebceac895ec59bbcdeea53ea632 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Suan\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_cdc4e011f93c357a66da3e9db7f0f58c.setIcon(div_icon_9ebbaebceac895ec59bbcdeea53ea632);
+            
+    
+            var circle_marker_5ec6915fa363a76f58e4ac22c198f5c9 = L.circleMarker(
+                [10.8745, -74.9787],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.840529991858627, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_9243aa3284b1f28be9c00d98372be8c7 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_db79f49394b9636b5602632919bfe545 = $(`<div id="html_db79f49394b9636b5602632919bfe545" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Tubará</div>         <div style="font-size: 13px;"><b>Votos:</b> 12</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_9243aa3284b1f28be9c00d98372be8c7.setContent(html_db79f49394b9636b5602632919bfe545);
+            
+        
+
+        circle_marker_5ec6915fa363a76f58e4ac22c198f5c9.bindPopup(popup_9243aa3284b1f28be9c00d98372be8c7)
+        ;
+
+        
+    
+    
+            circle_marker_5ec6915fa363a76f58e4ac22c198f5c9.bindTooltip(
+                `<div>
+                     Tubará: 12 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_7b1ad43e09d2fb06327d6771ade2ef46 = L.marker(
+                [10.8745, -74.9787],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_c7c53e5d0a2342faa6d3739177fdbbb4 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Tubar\u00e1\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_7b1ad43e09d2fb06327d6771ade2ef46.setIcon(div_icon_c7c53e5d0a2342faa6d3739177fdbbb4);
+            
+    
+            var circle_marker_3b81522b43d9509b1b985b89f48c987d = L.circleMarker(
+                [10.7419, -74.9761],
+                {"bubblingMouseEvents": true, "color": "#333333", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fdd835", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.099951888601959, "stroke": true, "weight": 1.2}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+        var popup_3179f2b1afa1e2126841194d7f413f79 = L.popup({
+  "maxWidth": 260,
+});
+
+        
+            
+                var html_24e87f76e892eb7f59afcd5418aaf6c0 = $(`<div id="html_24e87f76e892eb7f59afcd5418aaf6c0" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; min-width: 180px;">         <div style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Usiacurí</div>         <div style="font-size: 13px;"><b>Votos:</b> 25</div>         <div style="font-size: 13px;"><b>Nivel:</b> BAJO</div>     </div>     </div>`)[0];
+                popup_3179f2b1afa1e2126841194d7f413f79.setContent(html_24e87f76e892eb7f59afcd5418aaf6c0);
+            
+        
+
+        circle_marker_3b81522b43d9509b1b985b89f48c987d.bindPopup(popup_3179f2b1afa1e2126841194d7f413f79)
+        ;
+
+        
+    
+    
+            circle_marker_3b81522b43d9509b1b985b89f48c987d.bindTooltip(
+                `<div>
+                     Usiacurí: 25 votos
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_c1878bf1051b264863c823c36eb7a420 = L.marker(
+                [10.7419, -74.9761],
+                {
+}
+            ).addTo(feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce);
+        
+    
+            var div_icon_35dc51432807d8ca0b7c139340c24353 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                font-size: 11px; \n                font-weight: 700; \n                color: #1f1f1f; \n                text-shadow: 0 0 2px white, 0 0 2px white;\n                white-space: nowrap;\n                transform: translate(10px, -6px);\n            \"\u003e\n                Usiacur\u00ed\n            \u003c/div\u003e\n            ",
+  "className": "empty",
+});
+        
+    
+                marker_c1878bf1051b264863c823c36eb7a420.setIcon(div_icon_35dc51432807d8ca0b7c139340c24353);
+            
+    
+            feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce.addTo(map_fa49358000051104a95771528c15c94f);
+        
+    
+            var layer_control_ecf74e4dd9c3f05b7c1383aa0232187f_layers = {
+                base_layers : {
+                    "cartodbpositron" : tile_layer_e64e830e3507949b938978140704af9d,
+                },
+                overlays :  {
+                    "Votaci\u00f3n por municipio" : feature_group_086b0cc4cdd5b53fadb7e15a9cdc64ce,
+                },
+            };
+            let layer_control_ecf74e4dd9c3f05b7c1383aa0232187f = L.control.layers(
+                layer_control_ecf74e4dd9c3f05b7c1383aa0232187f_layers.base_layers,
+                layer_control_ecf74e4dd9c3f05b7c1383aa0232187f_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_fa49358000051104a95771528c15c94f);
+
+        
+</script>
+</html>
